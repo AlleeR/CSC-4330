@@ -1,1 +1,71 @@
+import unittest
+import random
+import time
 
+#Create selection sort algorithm 
+def SelecSort(array):
+
+  #Check if all elements are integers
+  for x in array:
+    if type(x) is not int:
+      raise ValueError
+
+  size = len(array)
+  for i in range(size):
+    min = i
+    for j in range(i+1, size):
+      if array[j] < array[min]:
+        min = j
+    array[i], array[min] = array[min], array[i]
+  return array
+
+empty_array = []
+arr1 = [-2, 45, 0, 11, -9, 88, -97, -202, 747]
+SelecSort(arr1)
+print(arr1)
+
+#Create class for unit tests
+class TestSortMethods(unittest.TestCase):
+
+  empty_array = []
+  arr1 = [-2, 45, 0, 11, -9, 88, -97, -202, 747]
+
+  #Positive Cases
+  def test_positive(self):
+    self.assertEqual(SelecSort(self.arr1.copy()), sorted(self.arr1))
+  
+  #Negative Case
+  def test_negative(self):
+    with self.assertRaises(ValueError):
+      invalid_array = ["str1", "str2"]
+      SelecSort(invalid_array)
+  
+  #Preformance Case
+  def test_performance(self):
+    #Generate very large array
+    arr2 = [random.randint(1,1000) for _ in range (1000)]
+
+    #Time execution of sort algorithm
+    start = time.time()
+    SelecSort(arr2)
+    end = time.time()
+    total = end - start
+
+    #Check if execution too longer than desired
+    self.assertLess(total, 1.0, "Sort did not meet time requriements")
+  
+  #Boundary Case
+  def test_boundary(self):
+    self.assertEqual(SelecSort(self.empty_array.copy()), [])
+
+  
+  #Idempotency Case
+  def test_idempotency(self):
+    self.assertEqual(SelecSort(self.arr1.copy()), sorted(self.arr1))
+    self.assertEqual(SelecSort(self.arr1.copy()), sorted(self.arr1))
+    self.assertEqual(SelecSort(self.arr1.copy()), sorted(self.arr1))
+
+
+if __name__ == '__main__':
+  unittest.main()
+  
